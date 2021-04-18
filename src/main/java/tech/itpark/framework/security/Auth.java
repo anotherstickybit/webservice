@@ -6,34 +6,39 @@ import java.util.Set;
 // Collection, Collections
 // Auth, Auths <- utility classes: 1. static methods, 2. "const"
 public interface Auth {
-  // by default public static final
-  String ROLE_ANONYMOUS = "ROLE_ANONYMOUS";
+    // by default public static final
+    String ROLE_ANONYMOUS = "ROLE_ANONYMOUS";
 
-  long getId();
-  Set<String> getRoles();
+    long getId();
 
-  default boolean hasRole(String role) {
-    return hasAnyRole(role);
-  }
+    Set<String> getRoles();
 
-  // TODO: ROLE_ADMIN (v), ROLE_USER (x) -> v -> allow wins
-  // TODO: ROLE_ADMIN (v), ROLE_USER (x) -> x (Windows) -> deny wins
-  default boolean hasAnyRole(String ...roles) {
-    return Arrays.stream(roles)
-        .anyMatch(o -> getRoles().contains(o));
-  }
+    default boolean hasRole(String role) {
+        return hasAnyRole(role);
+    }
 
-  static Auth anonymous() {
-    return new Auth() {
-      @Override
-      public long getId() {
-        return -1;
-      }
+    // TODO: ROLE_ADMIN (v), ROLE_USER (x) -> v -> allow wins
+    // TODO: ROLE_ADMIN (v), ROLE_USER (x) -> x (Windows) -> deny wins
+    default boolean hasAnyRole(String... roles) {
+        return Arrays.stream(roles)
+                .anyMatch(o -> getRoles().contains(o));
+    }
 
-      @Override
-      public Set<String> getRoles() {
-        return Set.of(ROLE_ANONYMOUS);
-      }
-    };
-  }
+    static Auth anonymous() {
+        return new Auth() {
+            @Override
+            public long getId() {
+                return -1;
+            }
+
+            @Override
+            public Set<String> getRoles() {
+                return Set.of(ROLE_ANONYMOUS);
+            }
+        };
+    }
+
+    default boolean isAnonymous() {
+        return hasRole(ROLE_ANONYMOUS);
+    }
 }

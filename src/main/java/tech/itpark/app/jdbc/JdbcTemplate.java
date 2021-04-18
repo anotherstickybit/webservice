@@ -1,4 +1,4 @@
-package tech.itpark.framework.jdbc;
+package tech.itpark.app.jdbc;
 
 import tech.itpark.app.exception.DataAccessException;
 

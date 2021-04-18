@@ -13,7 +13,8 @@ public class ContextLoadDestroyListener implements ServletContextListener {
   public void contextInitialized(ServletContextEvent sce) {
     final var servletContext = sce.getServletContext();
     final var basePackage = servletContext.getInitParameter("base-package");
-    context = new AnnotationConfigApplicationContext(basePackage);
+    context = new AnnotationConfigApplicationContext(
+            basePackage, "tech.itpark.framework");
     servletContext.setAttribute("CONTEXT", context);
   }
 

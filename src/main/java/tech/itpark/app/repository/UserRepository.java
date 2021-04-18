@@ -3,7 +3,7 @@ package tech.itpark.app.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import tech.itpark.app.exception.DataAccessException;
-import tech.itpark.framework.jdbc.JdbcTemplate;
+import tech.itpark.app.jdbc.JdbcTemplate;
 import tech.itpark.app.model.TokenAuth;
 import tech.itpark.app.model.User;
 
@@ -118,7 +118,7 @@ public class UserRepository {
     try (
         final var connection = ds.getConnection();
         final var statement = connection.prepareStatement("""
-              SELECT u.id, u.login, '**MASKED**' AS password, '**MASKED**' AS secret u.roles FROM users u
+              SELECT u.id, u.login, '**MASKED**' AS password, '**MASKED**' AS secret, u.roles FROM users u
               JOIN tokens t ON u.id = t.userid
               WHERE t.token = ?
             """);

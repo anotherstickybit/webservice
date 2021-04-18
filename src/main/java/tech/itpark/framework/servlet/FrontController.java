@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationContext;
-import tech.itpark.framework.http.Handler;
+import tech.itpark.framework.http.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -14,13 +14,16 @@ import java.util.Optional;
 // Servlet
 public class FrontController extends HttpServlet {
   private Map<String, Map<String, Handler>> routes;
-  private final Handler notFoundHandler = (request, response) -> response.sendError(404, "Page not found");
+  private RequestResponseReaderWriter rw;
+  private final Handler notFoundHandler = (request, response) -> response
+          .error(404, "Not found", ContentTypes.TEXT_PLAIN);
 
   @Override
   public void init() throws ServletException {
     super.init();
     try {
       final var context = (ApplicationContext) getServletContext().getAttribute("CONTEXT");
+      rw = context.getBean(RequestResponseReaderWriter.class);
       routes = (Map<String, Map<String, Handler>>) context.getBean("routes");
       // TODO: 1. Annotation Config -> @Component <- your class
       // TODO: 2. Java Config -> @Configuration @Bean <- not your class, initialization logic
@@ -40,7 +43,7 @@ public class FrontController extends HttpServlet {
       Optional.ofNullable(routes.get(path))
           .map(o -> o.get(method))
           .orElse(notFoundHandler)
-          .handle(request, response);
+          .handle(new ServerRequest(request, rw), new ServerResponse(response, rw));
     } catch (Exception e) {
       e.printStackTrace();
     }

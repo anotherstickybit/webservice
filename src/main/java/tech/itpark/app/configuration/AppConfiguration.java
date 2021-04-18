@@ -3,9 +3,11 @@ package tech.itpark.app.configuration;
 import com.google.gson.Gson;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tech.itpark.app.controller.GroupController;
 import tech.itpark.app.controller.UserController;
 import tech.itpark.framework.bodyconverter.BodyConverter;
 import tech.itpark.framework.bodyconverter.GsonBodyConverter;
+import tech.itpark.framework.bodyconverter.StringBodyConverter;
 import tech.itpark.framework.crypto.PasswordHasher;
 import tech.itpark.framework.crypto.PasswordHasherDefaultImpl;
 import tech.itpark.framework.crypto.TokenGenerator;
@@ -49,24 +51,30 @@ public class AppConfiguration {
     @Bean
     public List<BodyConverter> bodyConverters() {
         return List.of(
-                new GsonBodyConverter(new Gson())
+                new GsonBodyConverter(new Gson()),
+                new StringBodyConverter()
         );
     }
 
     @Bean
-    public Map<String, Map<String, Handler>> routes(UserController controller) {
+    public Map<String, Map<String, Handler>> routes(
+            UserController userCtrl,
+            GroupController groupCtrl) {
         return Map.of(
                 "/api/auth/registration", Map.of(
-                        Methods.POST, controller::register
+                        Methods.POST, userCtrl::register
                 ),
                 "/api/auth/login", Map.of(
-                        Methods.POST, controller::login
+                        Methods.POST, userCtrl::login
                 ),
                 "api/auth/reset", Map.of(
-                        Methods.POST, controller::passwordReset
+                        Methods.POST, userCtrl::passwordReset
                 ),
                 "/api/users/all", Map.of(
-                        Methods.GET, controller::getAll
+                        Methods.GET, userCtrl::getAll
+                ),
+                "/api/groups/save", Map.of(
+                        Methods.POST, groupCtrl::save
                 )
         );
     }
