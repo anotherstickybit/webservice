@@ -88,11 +88,12 @@ public class UserService implements AuthProvider {
     // TODO: 1. солить и хешировать +
     // TODO: 2. blacklist простых паролей
 
-    final var hash = passwordHasher.hash(request.getPassword());
+    final var passwordHash = passwordHasher.hash(request.getPassword());
+    final var secretHash = passwordHasher.hash(request.getSecret());
 
     // register
     final var saved = repository.save(
-        new User(0, request.getLogin(), hash, request.getSecret(), Set.of("ROLE_USER"))
+        new User(0, request.getLogin(), passwordHash, secretHash, Set.of("ROLE_USER"))
     );
     return new RegistrationResponseDto(
         saved.getId()
@@ -125,7 +126,7 @@ public class UserService implements AuthProvider {
   public PasswordResetResponseDto resetPassword(PasswordResetRequestDto requestDto) {
     User user = repository.getByLogin(requestDto.getLogin())
             .orElseThrow(() -> new RuntimeException("user with such login didn't found"));
-    if (!requestDto.getSecret().equals(user.getSecret())) {
+    if (!passwordHasher.matches(user.getSecret(), requestDto.getSecret())) {
       throw new PermissionDeniedException("you shall not pass");
     }
     final var hash = passwordHasher.hash(requestDto.getPassword());

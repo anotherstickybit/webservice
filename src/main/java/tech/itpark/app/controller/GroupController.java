@@ -18,4 +18,10 @@ public class GroupController {
         final var responseDto = service.save(request.auth(), requestDto);
         response.write(responseDto, ContentTypes.APPLICATION_JSON);
     }
+
+    public void remove(ServerRequest request, ServerResponse response) {
+        final var requestDto = request.read(GroupSaveRequestDto.class);
+        final var responseDto = service.save(request.auth(), requestDto);
+        response.write(responseDto, ContentTypes.APPLICATION_JSON);
+    }
 }

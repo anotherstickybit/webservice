@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import tech.itpark.app.model.Group;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -15,6 +16,17 @@ public class GroupRepository {
 
     public GroupRepository(DataSource ds) {
         jdbc = new NamedParameterJdbcTemplate(ds);
+    }
+
+    public List<Group> getAll() {
+        return jdbc.query(
+                "select id, ownerId, name from groups order by id",
+                ((rs, rowNum) -> new Group(
+                        rs.getLong("id"),
+                        rs.getLong("ownerId"),
+                        rs.getString("name")
+                ))
+        );
     }
 
     public Group save(Group group) {

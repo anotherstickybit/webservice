@@ -5,6 +5,7 @@ import jakarta.servlet.UnavailableException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import org.springframework.context.ApplicationContext;
 import tech.itpark.framework.http.*;
 
@@ -36,6 +37,7 @@ public class FrontController extends HttpServlet {
   protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException {
     final var path = request.getServletPath(); // FIXME: RTFM
     final var method = request.getMethod();
+
 
     // 1. method -> path
     // 2. path -> method

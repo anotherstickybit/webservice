@@ -1,6 +1,8 @@
 package tech.itpark.framework.bodyconverter;
 
 import com.google.gson.Gson;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import tech.itpark.app.exception.ConversionException;
 import tech.itpark.framework.http.ContentTypes;
@@ -24,7 +26,7 @@ public class GsonBodyConverter implements BodyConverter {
   }
 
   @Override
-  public <T> T read(Reader reader, Class<T> clazz) {
+  public <T> T read(HttpServletRequest request, Reader reader, Class<T> clazz) {
     try {
       return gson.fromJson(reader, clazz);
     } catch (Exception e) {
@@ -34,7 +36,7 @@ public class GsonBodyConverter implements BodyConverter {
 
   // TODO: convert to unchecked exception
   @Override
-  public void write(Writer writer, Object value) {
+  public void write(HttpServletResponse response, Writer writer, Object value) {
     try {
       writer.write(gson.toJson(value));
     } catch (Exception e) {

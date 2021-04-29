@@ -26,6 +26,10 @@
         <servlet-name>front-controller</servlet-name>
         <servlet-class>tech.itpark.framework.servlet.FrontController</servlet-class>
         <load-on-startup>1</load-on-startup>
+        <multipart-config>
+            <max-file-size>10485760</max-file-size>
+            <max-request-size>20971520</max-request-size>
+        </multipart-config>
     </servlet>
 
     <!-- mapping -->

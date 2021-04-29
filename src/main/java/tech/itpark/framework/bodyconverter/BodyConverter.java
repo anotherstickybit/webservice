@@ -1,5 +1,8 @@
 package tech.itpark.framework.bodyconverter;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.Reader;
 import java.io.Writer;
 
@@ -8,7 +11,7 @@ public interface BodyConverter {
 
   boolean canWrite(String contentType, Class<?> clazz);
 
-  <T> T read(Reader reader, Class<T> clazz);
+  <T> T read(HttpServletRequest request, Reader reader, Class<T> clazz);
 
-  void write(Writer writer, Object value);
+  void write(HttpServletResponse response, Writer writer, Object value);
 }

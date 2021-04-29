@@ -66,3 +66,14 @@ Authorization: {{token}}
 ###
 
 GET {{host}}/api/users/all
+
+
+POST {{host}}/api/media
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="file.png"
+Content-Type: image/png
+
+< ./jakarta.png
+--WebAppBoundary--

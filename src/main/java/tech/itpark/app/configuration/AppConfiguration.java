@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tech.itpark.app.controller.GroupController;
+import tech.itpark.app.controller.MediaController;
 import tech.itpark.app.controller.UserController;
 import tech.itpark.framework.bodyconverter.BodyConverter;
 import tech.itpark.framework.bodyconverter.GsonBodyConverter;
+import tech.itpark.framework.bodyconverter.MultipartBodyConverter;
 import tech.itpark.framework.bodyconverter.StringBodyConverter;
 import tech.itpark.framework.crypto.PasswordHasher;
 import tech.itpark.framework.crypto.PasswordHasherDefaultImpl;
@@ -52,14 +54,16 @@ public class AppConfiguration {
     public List<BodyConverter> bodyConverters() {
         return List.of(
                 new GsonBodyConverter(new Gson()),
-                new StringBodyConverter()
+                new StringBodyConverter(),
+                new MultipartBodyConverter()
         );
     }
 
     @Bean
     public Map<String, Map<String, Handler>> routes(
             UserController userCtrl,
-            GroupController groupCtrl) {
+            GroupController groupCtrl,
+            MediaController mediaCtrl) {
         return Map.of(
                 "/api/auth/registration", Map.of(
                         Methods.POST, userCtrl::register
@@ -75,6 +79,9 @@ public class AppConfiguration {
                 ),
                 "/api/groups/save", Map.of(
                         Methods.POST, groupCtrl::save
+                ),
+                "/api/media", Map.of(
+                        Methods.POST, mediaCtrl::save
                 )
         );
     }

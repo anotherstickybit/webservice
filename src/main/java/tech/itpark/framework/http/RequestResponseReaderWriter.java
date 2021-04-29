@@ -21,7 +21,7 @@ public class RequestResponseReaderWriter {
             }
 
             try {
-                return converter.read(request.getReader(), clazz);
+                return converter.read(request, request.getReader(), clazz);
             } catch (IOException e) {
                 e.printStackTrace();
                 // TODO: convert to special exception
@@ -40,7 +40,7 @@ public class RequestResponseReaderWriter {
 
             try {
                 response.setContentType(contentType);
-                converter.write(response.getWriter(), data);
+                converter.write(response, response.getWriter(), data);
                 return;
             } catch (IOException e) {
                 e.printStackTrace();
